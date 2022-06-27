@@ -31,7 +31,11 @@ console.log(ip);
 const usersRoutes = require('./src/routes/users.routes');
 const { url } = require('inspector');
 // using as middleware
-app.use(cors())
+//app.use(cors())
+var corsOptions = {
+  origin: "http://localhost:9100"
+};
+app.use(cors(corsOptions));
 
 
 app.use('/api/v1', usersRoutes)

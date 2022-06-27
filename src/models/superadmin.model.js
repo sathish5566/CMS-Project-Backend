@@ -68,7 +68,7 @@ SupserAdmin.findAll = function (status='',result) {
     if(status != '')
     {
        
-        dbConn.query("Select * from users where status=? order by id desc",status, function (err, res) {
+        dbConn.query("Select * from users where status=? order by id ",status, function (err, res) {
             if(err) {
               console.log("error: ", err);
               result(null, err);
@@ -83,7 +83,7 @@ SupserAdmin.findAll = function (status='',result) {
     {
         
 
-        dbConn.query("Select * from users  order by id desc", function (err, res) {
+        dbConn.query("Select * from users  order by id ", function (err, res) {
             if(err) {
               console.log("error: ", err);
               result(null, err);
@@ -152,6 +152,37 @@ SupserAdmin.delete = function(id, result){
     });
 };
 
+SupserAdmin.GetCurrentLoginUsers =  (users_type,user_id,result) => {
+
+    if(users_type != 2)
+    {       
+        dbConn.query("Select * from superadmin where id=?",user_id, function (err, res) {
+            if(err) {
+              console.log("error: ", err);
+              result(null, err);
+            }
+            else{
+              console.log('users : ', res);
+              result(null, res);
+            }
+            });
+
+    }else
+    {       
+
+        dbConn.query("Select * from users where id=?",user_id, function (err, res) {
+            if(err) {
+              console.log("error: ", err);
+              result(null, err);
+            }
+            else{
+              console.log('users : ', res);
+              result(null, res);
+            }
+            });
+    }
+    
+};
 
 
 module.exports = SupserAdmin

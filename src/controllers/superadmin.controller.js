@@ -38,17 +38,17 @@ exports.Login= function(req, res){
                     expiresIn: "24h",
                   }
                 );
-                res.json({httpCode:200,error:false,message:"Users Login successfully!",data:token});
+                res.json({httpCode:200,error:false,message:{"":"Authenticate successfully!"},data:token});
                
              
               } else {
                 //res.status(400).json({httpCode:400, error: "Invalid Password" });
-                return res.json({httpCode:400,error:true,message:"Invalid Password",data:null});
+                return res.json({httpCode:400,error:true,message:{"":"Invalid Password"},data:null});
               }
               
             }else
             {
-              return res.json({httpCode:400,error:true,message:"The admin approve soon.. "});
+              return res.json({httpCode:400,error:true,message:{"":"Email id does not exsits"}});
             }
 
             
@@ -116,5 +116,23 @@ exports.ApproveAdminStatus = function(req, res) {
 });
 }
 };
+
+exports.CurrentLoginUserDetails = (req, res) => {
+  const users_type = req.query.user_type
+  if(users_type && users_type != '')
+  {
+    const user_id=req.user.user_id
+    Users.GetCurrentLoginUsers(users_type,user_id, function(err, users) {
+
+      if (err)
+      res.send(err);
+      
+      res.json({httpCode:200,error:false,message:"get users!",data:users});
+    
+      });
+  }
+  
+};
+
 
 

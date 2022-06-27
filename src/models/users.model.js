@@ -15,6 +15,20 @@ var Users = function(users){
 
 };
 
+//Check email and phone no before create account 
+Users.checkuser = function(newUser, result){
+    
+    dbConn.query("Select id,name,phone,address,email,password from  users where email = ? OR phone = ?", [newUser.email,newUser.phone],function(err,res){
+        if(err) {
+            console.log(err);
+            result(err, null);
+        } else { 
+            console.log(res);
+            result(null ,res);
+        }
+    });
+    
+};
 
 //Users Create
 Users.create = function(newUser, result){
@@ -32,10 +46,11 @@ Users.create = function(newUser, result){
         }
     });
     
-    };
+};
+
 Users.Login = function(users, result){
     //console.log(users.email)
-    dbConn.query("Select id,name,phone,address,email,password from  users where status=1 and email    = ?", users.email,function(err,res){
+    dbConn.query("Select id,name,phone,address,email,password,status from  users where email    = ?", users.email,function(err,res){
 
         if(err)
         {
@@ -48,7 +63,7 @@ Users.Login = function(users, result){
         }
     });
     
-    };
+};
     
 Users.findById = function(id,result)
 {
