@@ -88,9 +88,35 @@ exports.Create= function(req, res){
 
 
 exports.findAll = function(req, res) {
-  var status = req.query.status
+  var status = req.query.status;
+  var searchText = req.query.search ? req.query.search : "" ;
+  var sortBy = req.query.sort_by ? req.query.sort_by : "";
+  var sortType = req.query.sort_type ? req.query.sort_type : "";
+  var startLimit = 0;
+  var endLimit = 2;
+  if(req.query.page && req.query.page > 0){
+    startLimit = parseInt(req.query.page) * 2;
+  }
+  var filters = {'searchText':searchText,"sortBy" :sortBy,"sortType" : sortType,"startLimit" : startLimit,"endLimit" : endLimit};
 
-Users.findAll(status,function(err, users) {
+Users.findAll(status,filters,function(err, users) {
+console.log('controller')
+if (err)
+res.send(err);
+console.log('res', users);
+return res.json({httpCode:200,error:false,message:"Users data!",data:users});
+});
+};
+
+exports.findAllTotal = function(req, res) {
+  var status = req.query.status;
+  var searchText = req.query.search;
+  var sortBy = req.query.sort_by;
+  var sortType = req.query.sort_type;
+  
+  var filters = {'searchText':searchText};
+
+Users.findAllTotal(status,filters,function(err, users) {
 console.log('controller')
 if (err)
 res.send(err);

@@ -5,7 +5,7 @@ const dbConn = mysql.createConnection({
     host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'awan_db'
+  database : 'awan_db',multipleStatements:true
 });
 dbConn.connect(function(err){
     if(err) throw err;

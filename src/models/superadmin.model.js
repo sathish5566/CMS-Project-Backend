@@ -63,26 +63,51 @@ SupserAdmin.Login = function(users, result){
     });
 };
 //Get all Users Details Expect Admin Only
-SupserAdmin.findAll = function (status='',result) {
-
-    if(status != '')
-    {
-       
-        dbConn.query("Select * from users where status=? order by id ",status, function (err, res) {
+SupserAdmin.findAll = function (status='',filters = {},result) {
+    var $sql = "select * from users "; var $whereCondition = '';var $totalSql = '';
+    if(status != ''){
+        $whereCondition += 'status='+status+' ';
+    }
+    if(filters.searchText){
+        if($whereCondition){
+            $whereCondition += ' and ';
+        }
+        $whereCondition += "( name like '%"+filters.searchText+"%' or email like '%"+filters.searchText+"%' or phone like '%"+filters.searchText+"%' )";
+    }
+    if($whereCondition !== ''){
+        $sql += " where "+$whereCondition;
+    } 
+    $totalSql = "Select count(id) as total from users";
+    if($whereCondition !== ''){
+        $totalSql += " where "+$whereCondition;
+    } 
+    if(filters.sortBy){
+        $sql += " order by "+filters.sortBy+" ";
+    } else {
+        $sql += " order by id  ";
+    }
+    if(filters.sortType){
+        $sql += filters.sortType;
+    }
+    $sql += " LIMIT "+filters.startLimit+","+filters.endLimit;
+    console.log($sql);
+    console.log(filters);
+    if(status != ''){
+        dbConn.query($sql+';'+$totalSql,[1,2],function (err, res) {
             if(err) {
               console.log("error: ", err);
               result(null, err);
             }
             else{
-              console.log('users : ', res);
-              result(null, res);
+                var returnData = {
+                    "result" : res[0],
+                    "total" : res[1][0]['total']
+                };
+              console.log('users : ', returnData);
+              result(null, returnData);
             }
-            });
-
-    }else
-    {
-        
-
+        });
+    } else {
         dbConn.query("Select * from users  order by id ", function (err, res) {
             if(err) {
               console.log("error: ", err);
@@ -92,11 +117,54 @@ SupserAdmin.findAll = function (status='',result) {
               console.log('users : ', res);
               result(null, res);
             }
-            });
+        });
     }
     
-    };
-    SupserAdmin.readStatus = function(id, token, result){
+};
+
+//Get all Users Details Expect Admin Only
+SupserAdmin.findAllTotal = function (status='',filters = {},result) {
+    var $sql = "Select count(id) as total from users "; var $whereCondition = '';
+    if(status != ''){
+        $whereCondition += 'status='+status+' ';
+    }
+    if(filters.searchText){
+        if($whereCondition){
+            $whereCondition += ' and ';
+        }
+        $whereCondition += "( name like '%"+filters.searchText+"%' or email like '%"+filters.searchText+"%' or phone '%"+filters.searchText+"%' )";
+    }
+    if($whereCondition !== ''){
+        $sql += " where "+$whereCondition;
+    } 
+    
+    if(status != ''){
+        dbConn.query($sql, function (err, res) {
+            if(err) {
+              console.log("error: ", err);
+              result(null, err);
+            }
+            else{
+              console.log('users : ', res);
+              result(null, res);
+            }
+        });
+    } else {
+        dbConn.query("Select count(id) as total from users ", function (err, res) {
+            if(err) {
+              console.log("error: ", err);
+              result(null, err);
+            }
+            else{
+              console.log('users : ', res);
+              result(null, res);
+            }
+        });
+    }
+    
+};
+
+SupserAdmin.readStatus = function(id, token, result){
     dbConn.query("UPDATE superadmin SET token=? WHERE id = ?",
     [token,id],
     function(err, res)
