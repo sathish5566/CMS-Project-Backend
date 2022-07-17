@@ -149,6 +149,47 @@ Users.delete = function(id, result){
     });
 };
 
+//Get Property Type Details
+
+Users.PropertyType =  (result) => {
+
+        
+        dbConn.query("Select id,property_name from property_type where status=1 ", function (err, res) {
+            if(err) {
+              console.log("error: ", err);
+              result(null, err);
+            }
+            else{
+              console.log('users : ', res);
+              result(null, res);
+            }
+            });
+
+    
+    
+    };
+
+
+//Get Unit Type Details
+
+Users.UnitType =  (result) => {
+
+        
+    dbConn.query("Select id,name from unit_types where status=1 ", function (err, res) {
+        if(err) {
+          console.log("error: ", err);
+          result(null, err);
+        }
+        else{
+          console.log('Unit Type : ', res);
+          result(null, res);
+        }
+        });
+
+
+
+};
+
 
 
 module.exports = Users
