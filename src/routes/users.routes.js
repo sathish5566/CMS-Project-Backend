@@ -24,4 +24,22 @@ router.post('/register-user', usersController.Create);
 // Retrieve current logged in user details 
 router.get('/current-users-details',[auth], superadminController.CurrentLoginUserDetails)
 
+
+//Initial Setup 
+router.post('/create-appartment',[auth], InitialSetupController.AppartmentCreate);
+//Insert AppartmentBlock,Comman Areas,Types 
+router.post('/create-appartment-blocks',[auth], InitialSetupController.AppartmentBlockCreate);
+//Insert Floor layout set up
+router.post('/create-floor-layout',[auth], InitialSetupController.CreateFloorLayout);
+//Residential Type List
+router.get('/residential-type-list',[auth], InitialSetupController.ResidentialTypeList);
+//Floor Layout Type Lis
+router.get('/floor-layout-type-list',[auth], InitialSetupController.FloorLayoutTypesList);
+//Update Floor Level
+router.post('/update-apartment-blocks',[auth], InitialSetupController.UpdateApartmentBlock);
+//Property Type
+router.get('/property-type', usersController.PropertyTypeList); 
+//Property Type
+router.get('/unit-types', usersController.UnitTypeList);
+
 module.exports = router

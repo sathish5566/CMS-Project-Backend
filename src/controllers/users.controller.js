@@ -99,3 +99,36 @@ exports.Create= function(req, res){
 
 
 
+//Get Property Type
+
+exports.PropertyTypeList = (req, res) => {
+
+     
+    Users.PropertyType(function(err, property_type) {
+
+      if (err)
+      res.send(err);
+      
+      res.json({httpCode:200,error:false,message:"Property Type List",data:property_type});
+    
+      });
+  
+  
+};
+
+//Get Unit Type
+
+exports.UnitTypeList = (req, res) => {
+
+     
+  Users.UnitType(function(err, unit_type) {
+
+    if (err)
+    res.send(err);
+    
+    res.json({httpCode:200,error:false,message:"Unit Type List",data:unit_type});
+  
+    });
+
+
+};
