@@ -187,8 +187,12 @@ SupserAdmin.readStatus = function(id, token, result){
 SupserAdmin.updateAdminStatus = function(users, result){
     
    const update_date=new Date();
-    dbConn.query("UPDATE users SET status=?,approved_by=?,approved_date=?,updated_date=? WHERE id = ?",
-    [users.admin_status,users.admin_id,update_date,update_date,users.user_id],
+   var $sql = "UPDATE users SET status='"+users.user.status+"',approved_by='"+users.admin_id+"',approved_date='"+update_date+"',updated_date='"+update_date+"' ";
+   if(users.user.declineReason){
+        $sql += ",decline_reason='"+users.user.declineReason+"' ";
+   }
+   $sql += " WHERE id IN ("+users.user.user_ids+")";
+    var query = dbConn.query($sql,
     function(err, res)
     {
         if(err)
@@ -201,6 +205,7 @@ SupserAdmin.updateAdminStatus = function(users, result){
             result(null, res)
         }  
     });
+    console.log(query.sql); 
 };
 
 //Delete Users

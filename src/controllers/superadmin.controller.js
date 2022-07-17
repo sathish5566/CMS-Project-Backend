@@ -130,8 +130,9 @@ exports.ApproveAdminStatus = function(req, res) {
   if(req.body.constructor === Object && Object.keys(req.body).length === 0){
     return res.status(400).send({ error:true, message: 'Please provide all required field' });
   }else{
-    new_users.admin_id=req.user.user_id
-    console.log(new_users)
+    new_users.admin_id = req.user.user_id;
+    //new_users.user_ids = req.user.user_ids.join(',');
+    console.log(new_users);
     Users.updateAdminStatus(new_users, function(err, users) {
    if (err)
    {
