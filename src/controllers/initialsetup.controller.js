@@ -112,7 +112,7 @@ exports.ResidentialTypeList = (req, res) => {
     
     res.json({httpCode:200,error:false,message:"Residential Type List",data:residential_list});
   
-    });s
+    });
 
 
 };
@@ -126,6 +126,26 @@ exports.FloorLayoutTypesList = (req, res) => {
   floor_data.users_id=req.user.user_id
   //const apartment_id=req.query.apartment_id
   FloorLayoutTypes.FloorLayoutTypesList(floor_data,function(err, floorlayout_list) {
+
+    if (err)
+    res.send(err);
+    
+    res.json({httpCode:200,error:false,message:"Floor Layout List",data:floorlayout_list});
+  
+    });
+
+
+};
+
+//List the .Total Block for block units setup
+
+exports.TotalBlockList = (req, res) => {
+
+  var floor_data={apartment_id:'',users_id:''}
+  floor_data.apartment_id=req.query.apartment_id
+  floor_data.users_id=req.user.user_id
+  //const apartment_id=req.query.apartment_id
+  ApartmentsBlocks.TotalBlockList(floor_data,function(err, floorlayout_list) {
 
     if (err)
     res.send(err);
@@ -156,6 +176,27 @@ exports.UpdateApartmentBlock = (req,res) => {
       
     }
 
+};
+
+exports.GetAllUnits = function(req, res) {
+  var apartment_id = req.query.apartment_id;
+  var searchText = req.query.search ? req.query.search : "" ;
+  var sortBy = req.query.sort_by ? req.query.sort_by : "";
+  var sortType = req.query.sort_type ? req.query.sort_type : "";
+  var startLimit = 0;
+  var endLimit = 10;
+  if(req.query.page && req.query.page > 0){
+    startLimit = parseInt(req.query.page) * 10;
+  }
+  var filters = {'searchText':searchText,"sortBy" :sortBy,"sortType" : sortType,"startLimit" : startLimit,"endLimit" : endLimit};
+
+  ApartmentsBlocks.GetAllUnits(apartment_id,filters,function(err, unitList) {
+    console.log('controller')
+    if (err)
+    res.send(err);
+    console.log('res', unitList);
+    return res.json({httpCode:200,error:false,message:"Units data!",data:unitList});
+  });
 };
 
 

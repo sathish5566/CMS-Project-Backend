@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const usersController =   require('../controllers/users.controller');
 const superadminController =   require('../controllers/superadmin.controller');
+const InitialSetupController =   require('../controllers/initialsetup.controller');
 const auth = require("../middleware/auth");
 const auth_key = require('../../config/auth.config')
 
@@ -35,11 +36,15 @@ router.post('/create-floor-layout',[auth], InitialSetupController.CreateFloorLay
 router.get('/residential-type-list',[auth], InitialSetupController.ResidentialTypeList);
 //Floor Layout Type Lis
 router.get('/floor-layout-type-list',[auth], InitialSetupController.FloorLayoutTypesList);
+//get block list
+router.get('/total-blocks-list',[auth], InitialSetupController.TotalBlockList);
 //Update Floor Level
 router.post('/update-apartment-blocks',[auth], InitialSetupController.UpdateApartmentBlock);
 //Property Type
 router.get('/property-type', usersController.PropertyTypeList); 
 //Property Type
 router.get('/unit-types', usersController.UnitTypeList);
+//Retrive  All User Units for display 
+router.get('/get-all-appartment-units',[auth], InitialSetupController.GetAllUnits);
 
 module.exports = router
